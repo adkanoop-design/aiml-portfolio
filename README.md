@@ -1,13 +1,14 @@
 # AI/ML Project Portfolio — Anoop Krishnan
 
-Applied machine learning and data analytics projects completed in the **Post-Graduate Program in Artificial
-Intelligence & Machine Learning: Business Applications (PGP-AIML)** at **The University of Texas at Austin —
-McCombs School of Business** (2025–2026).
+Applied machine learning, generative AI and data analytics projects completed in the **Post-Graduate Program in
+Artificial Intelligence & Machine Learning: Business Applications (PGP-AIML)** at **The University of Texas at
+Austin — McCombs School of Business** (2025–2026).
 
 **Verified academic e-portfolio:** [mygreatlearning.com/eportfolio/anoop-krishnan](https://www.mygreatlearning.com/eportfolio/anoop-krishnan)
 **LinkedIn:** [linkedin.com/in/anoop-krishnan-executive](https://www.linkedin.com/in/anoop-krishnan-executive)
 
-**Start here:** [04 — ReneWind](04-renewind-neural-networks) (neural networks) and
+**Start here:** [05 — Medical Assistant](05-medical-assistant-rag) (retrieval-augmented generation with an
+open-weights LLM), [04 — ReneWind](04-renewind-neural-networks) (neural networks) and
 [03 — EasyVisa](03-easyvisa-ensemble) (ensemble methods) are the most technically involved.
 
 ---
@@ -87,6 +88,33 @@ selection metric, realised cost as the economic check, decision-threshold sweep 
 - Threshold tuning returned **zero saving**, because the 20:1 cost asymmetry and the 17:1 class weighting cancel out
 
 **Details:** [04-renewind-neural-networks](04-renewind-neural-networks) · **Stack:** Python, TensorFlow/Keras, scikit-learn
+
+---
+
+## 05 — Medical Assistant: Clinical Knowledge Assistant with RAG (Generative AI)
+
+**Goal:** Give clinicians fast, verifiable answers from the 4,114-page *Merck Manual* instead of an LLM's memory —
+complete, consistent between users, and traceable to the page that justifies them.
+
+**Approach:** Five clinical questions answered three ways so each step could be measured against the last: a raw
+**Mistral-7B-Instruct** baseline (4-bit GGUF on a T4), **five prompt-engineering / decoding combinations**, then a
+full **RAG pipeline** — watermark cleaning, 17,047 overlapping chunks, MiniLM embeddings, persistent ChromaDB index,
+answer-only-from-context prompt — with **six chunking / retriever / LLM configurations** compared and the retrieved
+page numbers tabulated for every run. An LLM-as-a-judge scored groundedness and relevance.
+
+**Results:**
+- Final configuration (`k = 4`, 512 tokens, strict structured prompt) scored **5/5 groundedness and 5/5 relevance**
+  on all five questions, every answer built from cited manual pages
+- The raw LLM truncated four of five answers and never reached the treatment part of one question; prompting fixed
+  completeness but not knowledge — the "constrained" prompt still recommended a treatment trauma guidance does not
+  support, with no way to verify it
+- **Retrieval was the limiting factor, not the model:** `k = 3` pulled neighbouring-chapter noise into the sepsis
+  answer and missed the brain-injury chapter entirely; a finer 500-character index recovered both. Documented as the
+  key finding, with hybrid retrieval and a re-ranker recommended next
+- Self-evaluation shown to be lenient — a context-based judge cannot detect a retrieval miss — so an independent
+  judge, retrieval-recall checks and clinician review are recommended before any clinical use
+
+**Details:** [05-medical-assistant-rag](05-medical-assistant-rag) · **Stack:** Python, llama-cpp-python, LangChain, ChromaDB, sentence-transformers
 
 ---
 
