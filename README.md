@@ -120,7 +120,7 @@ page numbers tabulated for every run. An LLM-as-a-judge scored groundedness and 
 
 ## About
 
-16 years in financial-services technology and data (2009–2025), including 11 years at Northern Trust Corporation —
+16 years in financial-services technology and data (2009–2025), including 13 years at Northern Trust Corporation —
 Data Governance and Data Domain Lead on the $2B FundMaster book-of-record modernization, and delivery lead on
 settlement, reference-data and conversational-AI programmes across a global custody platform. Now combining
 enterprise-scale data governance experience with hands-on machine learning.
