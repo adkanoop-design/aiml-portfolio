@@ -7,9 +7,10 @@ Austin — McCombs School of Business** (2025–2026).
 **Verified academic e-portfolio:** [mygreatlearning.com/eportfolio/anoop-krishnan](https://www.mygreatlearning.com/eportfolio/anoop-krishnan)
 **LinkedIn:** [linkedin.com/in/anoop-krishnan-executive](https://www.linkedin.com/in/anoop-krishnan-executive)
 
-**Start here:** [05 — Medical Assistant](05-medical-assistant-rag) (retrieval-augmented generation with an
-open-weights LLM), [04 — ReneWind](04-renewind-neural-networks) (neural networks) and
-[03 — EasyVisa](03-easyvisa-ensemble) (ensemble methods) are the most technically involved.
+**Start here:** [06 — Delivery Exception Agents](06-ai-agents-delivery-exception) (LangGraph multi-agent system
+with RAG and a critic loop), [05 — Medical Assistant](05-medical-assistant-rag) (retrieval-augmented generation with
+an open-weights LLM) and [04 — ReneWind](04-renewind-neural-networks) (neural networks) are the most technically
+involved.
 
 ---
 
@@ -115,6 +116,35 @@ page numbers tabulated for every run. An LLM-as-a-judge scored groundedness and 
   judge, retrieval-recall checks and clinician review are recommended before any clinical use
 
 **Details:** [05-medical-assistant-rag](05-medical-assistant-rag) · **Stack:** Python, llama-cpp-python, LangChain, ChromaDB, sentence-transformers
+
+---
+
+## 06 — Last-Mile Delivery Exception Handling with AI Agents (Multi-Agent Systems)
+
+**Goal:** Automate a retailer's delivery-exception desk end to end — read noisy driver logs, decide the right action
+from the operations playbook, escalate to a supervisor only when policy requires it, and write the customer
+notification — with every decision auditable.
+
+**Approach:** A **LangGraph hub-and-spoke multi-agent system**: a deterministic preprocessor (de-duplication,
+consolidation, injection guardrail, noise filter) and orchestrator; five tools (customer and locker lookups from
+SQLite, log reader, **playbook RAG over ChromaDB with page citations**, and a rule engine encoding the escalation
+matrix); a Resolution Agent and Communication Agent on `gpt-4o-mini`; and a `gpt-4o` **Critic** that validates both
+the decision and the message, with a capped revision loop. Automatic escalation triggers are enforced in code and
+cannot be overridden by an LLM; discretionary ones are the Critic's call. Evaluated on five dimensions against
+ground truth, with an LLM-as-a-judge for reasoning coherence.
+
+**Results:**
+- **100% task completion, 100% escalation accuracy, 100% tool-call accuracy, 5.0/5 coherence** on the ten curated
+  shipments; routine rows filtered at zero LLM cost, ~8.5 s per exception end to end
+- The hardest case — third attempt, only locker FULL — was resolved the way the playbook intends: recommend the
+  locker reroute *and* escalate with a concrete ask, rather than schedule a forbidden fourth attempt
+- Discretionary escalation (Standard customer with six exceptions, no automatic trigger) was caught by the Critic;
+  the two routine control cases were correctly not escalated
+- Prompt calibration, not architecture, was the main lever: earlier runs over-escalated one routine case through a
+  Critic revision loop and leaked internal wording into customer messages — each fixed and documented. One residual
+  wording flaw is left in and discussed as an argument for a recommend-and-draft pilot
+
+**Details:** [06-ai-agents-delivery-exception](06-ai-agents-delivery-exception) · **Stack:** Python, LangGraph, LangChain, OpenAI, ChromaDB, Pydantic, SQLite
 
 ---
 
