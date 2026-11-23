@@ -7,7 +7,8 @@ Austin — McCombs School of Business** (2025–2026).
 **Verified academic e-portfolio:** [mygreatlearning.com/eportfolio/anoop-krishnan](https://www.mygreatlearning.com/eportfolio/anoop-krishnan)
 **LinkedIn:** [linkedin.com/in/anoop-krishnan-executive](https://www.linkedin.com/in/anoop-krishnan-executive)
 
-**Start here:** [06 — Delivery Exception Agents](06-ai-agents-delivery-exception) (LangGraph multi-agent system
+**Start here:** [07 — SuperKart](07-superkart-model-deployment) (model trained, served as a Flask API with a
+Streamlit UI in Docker), [06 — Delivery Exception Agents](06-ai-agents-delivery-exception) (LangGraph multi-agent system
 with RAG and a critic loop), [05 — Medical Assistant](05-medical-assistant-rag) (retrieval-augmented generation with
 an open-weights LLM) and [04 — ReneWind](04-renewind-neural-networks) (neural networks) are the most technically
 involved.
@@ -29,7 +30,7 @@ post-pruned model (cost-complexity pruning), compared on Recall as the primary m
 - Income and Education dominate feature importance (combined >79%)
 - CD-account holders convert at **6x the base rate** (46% vs. 7%)
 
-**Stack:** Python, pandas, numpy, scikit-learn, matplotlib, seaborn
+**Details:** [01-personal-loan-campaign](01-personal-loan-campaign) · **Stack:** Python, pandas, numpy, scikit-learn, matplotlib, seaborn
 
 ---
 
@@ -46,7 +47,7 @@ informing pricing, promotion and staffing decisions.
 - **10.54% of orders exceed 60 minutes** end-to-end; weekday deliveries average 6 minutes slower than weekends
 - Top 5 restaurants account for 33% of orders; 38.8% unrated — a structural gap in the feedback loop
 
-**Stack:** Python, pandas, numpy, matplotlib, seaborn
+**Details:** [02-foodhub-analytics](02-foodhub-analytics) · **Stack:** Python, pandas, numpy, matplotlib, seaborn
 
 ---
 
@@ -145,6 +146,31 @@ ground truth, with an LLM-as-a-judge for reasoning coherence.
   wording flaw is left in and discussed as an argument for a recommend-and-draft pilot
 
 **Details:** [06-ai-agents-delivery-exception](06-ai-agents-delivery-exception) · **Stack:** Python, LangGraph, LangChain, OpenAI, ChromaDB, Pydantic, SQLite
+
+---
+
+## 07 — SuperKart: Sales Forecasting & Model Deployment (Flask API + Streamlit, Docker)
+
+**Goal:** Forecast the quarterly revenue of each product in each SuperKart outlet for inventory and procurement
+planning, and put the model into service: callable from other systems through an API, and usable by planners
+through a web UI.
+
+**Approach:** Feature engineering designed around the API contract (product family from the ID prefix, store age,
+perishable grouping); Random Forest and XGBoost inside scikit-learn pipelines, tuned with GridSearchCV (5-fold CV,
+RMSE). The whole pipeline is serialized with joblib and served by a **Flask API** (online and batch endpoints,
+gunicorn) and a **Streamlit UI**, each in its own **Docker** container on a shared Docker network in a
+**GitHub Codespace**, then called live from Colab.
+
+**Results:**
+- Final tuned **Random Forest**: test **R² 0.930, RMSE 283.2, MAPE 3.67%**, also best on cross-validated RMSE (279.8)
+- Price is the main lever (MRP carries 42% of feature importance); the store matters more than the product, with
+  every product type selling nearly **3×** more per item in the Tier 1 Departmental Store than in the Tier 3 Food Mart
+- Shelf space shows **no link to sales** (r ≈ 0.00), which points to a cheap merchandising experiment
+- The deployed API reproduced the local predictions exactly and scored unseen categories without errors
+
+**Details:** [07-superkart-model-deployment](07-superkart-model-deployment) · **Deployment repo:**
+[superkart-sales-forecast](https://github.com/adkanoop-design/superkart-sales-forecast) · **Stack:** Python,
+scikit-learn, XGBoost, Flask, Streamlit, Docker
 
 ---
 
